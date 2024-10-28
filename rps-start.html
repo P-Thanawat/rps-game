@@ -1,0 +1,188 @@
+<!DOCTYPE >
+<html>
+  <head>
+    <style>
+      img {
+        width: 50%;
+        height: 50%;
+        border: 2px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><center>Rock Paper Scissors Challange</center></h1>
+    <hr />
+    <div style="width: 100%">
+      <!-- User -->
+      <div
+        style="
+          width: 40%;
+          float: left;
+          background-color: lightgray;
+          text-align: center;
+          border: 5px solid white;
+          padding: 10px;
+        "
+      >
+        <h2>User</h2>
+        <p id="u_score" style="font-weight: bold">Score: 0</p>
+        <img id="u_img" src="default.jpg" />
+        <br /><br />
+        <b>Choose one:</b><br />
+        <input type="radio" name="u_gameChoice" id="u_rock" checked />Rock
+        <input type="radio" name="u_gameChoice" id="u_paper" />Paper
+        <input type="radio" name="u_gameChoice" id="u_scissor" />Scissors
+      </div>
+
+      <!-- Result display -->
+      <div style="width: 15%; float: left; padding: 3px; text-align: center">
+        <input
+          type="button"
+          id="play"
+          value="Play!"
+          style="padding: 10px"
+          onclick="startGame()"
+        />
+        <input
+          type="button"
+          value="Reset Score"
+          style="padding: 10px"
+          onclick="reset()"
+        />
+        <br />
+        <h2>Round:</h2>
+        <p id="rounds" style="font-size: 40px">0</p>
+        <br />
+        <h2>Result:</h2>
+        <p id="winner" style="font-size: 20px"></p>
+      </div>
+
+      <!-- Computer -->
+      <div
+        style="
+          width: 40%;
+          float: left;
+          background-color: lightgray;
+          text-align: center;
+          border: 5px solid white;
+          padding: 10px;
+        "
+      >
+        <h2>Computer</h2>
+        <p id="c_score" style="font-weight: bold">Score: 0</p>
+        <img id="c_img" src="default.jpg" />
+        <br /><br />
+        <b>Computer's choice:</b><br />
+        <input type="radio" name="c_gameChoice" id="c_rock" disabled />Rock
+        <input type="radio" name="c_gameChoice" id="c_paper" disabled />Paper
+        <input
+          type="radio"
+          name="c_gameChoice"
+          id="c_scissor"
+          disabled
+        />Scissors
+      </div>
+    </div>
+
+    <!-- Javascript -->
+    <script>
+      // 1
+      var userScore = 0;
+      var computerScore = 0;
+      var rounds = 0;
+
+      // 2
+      function reset() {
+        userScore = 0;
+        computerScore = 0;
+        rounds = 0;
+        document.getElementById("rounds").innerHTML = 0;
+        document.getElementById("u_score").innerHTML = "Score 0";
+        document.getElementById("c_score").innerHTML = "Score 0";
+
+        // reset image
+        document.getElementById("u_img").src = "default.jpg";
+        document.getElementById("c_img").src = "default.jpg";
+
+        // clear winner
+        document.getElementById("winner").innerHTML = "";
+      }
+
+      // 3
+      function findSelection() {
+        var userRock = document.getElementById("u_rock").checked;
+        var userPaper = document.getElementById("u_paper").checked;
+        var userScissor = document.getElementById("u_scissor").checked;
+
+        if (userRock) {
+          document.getElementById("u_img").src = "rock.jpg";
+          return "rock";
+        } else if (userPaper) {
+          document.getElementById("u_img").src = "paper.jpg";
+          return "paper";
+        } else if (userScissor) {
+          document.getElementById("u_img").src = "scissor.jpg";
+          return "scissor";
+        }
+      }
+
+      function randSelection() {
+        var computerChoice = 1 + Math.floor(Math.random() * 3); //random 1-3
+        if (computerChoice === 1) {
+          document.getElementById("c_img").src = "rock.jpg";
+          return "rock";
+        } else if (computerChoice === 2) {
+          document.getElementById("c_img").src = "paper.jpg";
+          return "paper";
+        } else if (computerChoice === 3) {
+          document.getElementById("c_img").src = "scissor.jpg";
+          return "scissor";
+        }
+      }
+
+      function winnerSelection(userChioce, computerChoice) {
+        var userWinCondition =
+          (userChioce === "rock" && computerChoice === "scissor") ||
+          (userChioce === "paper" && computerChoice === "rock") ||
+          (userChioce === "scissor" && computerChoice === "paper");
+
+        if (userChioce === computerChoice) {
+          return "even";
+        } else if (userWinCondition) {
+          return "user";
+        } else {
+          return "computer";
+        }
+      }
+
+      function startGame() {
+        var userChoice = findSelection();
+        console.log(userChoice);
+        var computerChoice = randSelection();
+        console.log(computerChoice);
+        var winner = winnerSelection(userChoice, computerChoice);
+        console.log(winner);
+
+        //update rounds
+        rounds++;
+        document.getElementById("rounds").innerHTML = rounds;
+
+        //update result
+        var message = "";
+        if (winner === "user") {
+          userScore++;
+          document.getElementById("u_score").innerHTML = "Score " + userScore;
+          message = "You Win!";
+        } else if (winner === "computer") {
+          computerScore++;
+          document.getElementById("c_score").innerHTML =
+            "Score " + computerScore;
+          message = "You Lose!";
+        } else if (winner === "even") {
+          message = "You Draw!";
+        }
+        document.getElementById("winner").innerHTML = message;
+      }
+    </script>
+  </body>
+</html>
